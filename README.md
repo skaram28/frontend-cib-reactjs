@@ -29,9 +29,7 @@ It allows customers and companies to login, view dashboards, invest in funds, an
 ## **Setup Instructions**
 
 1. Clone the Repository
-git clone https://github.com/yourusername/your-repo-name.git
-
-cd your-repo-name
+git clone 
 
 2. Install Dependencies
 
