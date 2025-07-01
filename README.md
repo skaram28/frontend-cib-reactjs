@@ -7,11 +7,11 @@ It allows customers and companies to login, view dashboards, invest in funds, an
 
 ##  **Project Summary**
 
-✔️ **Login and Registration** for individual and company users (dummy data based login).  
-✔️ **Dashboard** displaying welcome message and user summary.  
-✔️ **Fund Selection** page with filters for sector, risk, and performance, using dummy JSON data for testing.  
-✔️ **Portfolio page** with transaction history and portfolio overview (Need to add). ---- pending
-✔️ **Responsive design** using Material UI Grid and components.
+ **Login and Registration** for individual and company users (dummy data based login).  
+ **Dashboard** displaying welcome message and user summary.  
+ **Fund Selection** page with filters for sector, risk, and performance, using dummy JSON data for testing.  
+ **Portfolio page** with transaction history and portfolio overview (Need to add). ---- pending
+ **Responsive design** using Material UI Grid and components.
 
 ---
 
