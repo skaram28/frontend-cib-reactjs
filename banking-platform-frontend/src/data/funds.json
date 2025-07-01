@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Technology",
+    "sector": "Technology",
+    "risk": "Medium",
+    "return": "+12.5%",
+    "performance": "last1year"
+  },
+  {
+    "id": 2,
+    "name": "Healthcare",
+    "sector": "Healthcare",
+    "risk": "Low",
+    "return": "+8.9%",
+    "performance": "last30days"
+  },
+  {
+    "id": 3,
+    "name": "Energy",
+    "sector": "Energy",
+    "risk": "High",
+    "return": "+6.8%",
+    "performance": "last1year"
+  },
+  {
+    "id": 4,
+    "name": "Real Estate",
+    "sector": "Real Estate",
+    "risk": "Medium",
+    "return": "+10.2%",
+    "performance": "last30days"
+  }
+]
