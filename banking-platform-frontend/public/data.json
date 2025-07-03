@@ -1,0 +1,18 @@
+{
+"transactions": [
+{ "fundsId": "F01", "date": "Jan 24, 2024", "status": "Completed", "amount": "$2.09" },
+{ "fundsId": "F02", "date": "April 24, 2023", "status": "Pending", "amount": "$0.15" },
+{ "fundsId": "F03", "date": "Dec 22, 2020", "status": "Completed", "amount": "$6.00" }
+],
+"portfolio": [
+{
+"id": "9",
+"portfolioNumber": "PORT1009",
+"portfolioType": "SAVINGS",
+"status": "INACTIVE",
+"startDate": "2025-06-09",
+"updateddate": null,
+"enddate": null
+}
+]
+}
