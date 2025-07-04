@@ -79,7 +79,8 @@ const Register = () => {
   };
 
   return (
-    <Container
+    <>
+    {/* <Container
       maxWidth="sm"
       sx={{
         display: "flex",
@@ -88,7 +89,21 @@ const Register = () => {
         minHeight: "100vh",
         backgroundColor: "#f5f7fa",
       }}
-    >
+    > */}
+    
+      {/* <Box
+        component="img"
+        src="https://png.pngtree.com/thumb_back/fw800/background/20230715/pngtree-d-render-golden-globe-and-a-tower-of-gold-coins-symbolizing-image_3875015.jpg" // Replace with your image URL
+        alt="Finance"
+        sx={{
+          width: '100%',
+          height: 180,
+          objectFit: 'cover',
+          borderRadius: 2,
+          mb: 2,
+        }}
+      /> */}
+
       <Paper elevation={4} sx={{ width: "100%", padding: 4, borderRadius: 3 }}>
         <Box
           sx={{
@@ -100,6 +115,18 @@ const Register = () => {
             mb: 3,
           }}
         >
+        <Box
+        component="img"
+        src="https://png.pngtree.com/thumb_back/fw800/background/20230715/pngtree-d-render-golden-globe-and-a-tower-of-gold-coins-symbolizing-image_3875015.jpg" // Replace with your image URL
+        alt="Finance"
+        sx={{
+          width: '100%',
+          height: 180,
+          objectFit: 'cover',
+          borderRadius: 5,
+          mb: 2,
+        }}
+      />
           <Typography variant="subtitle2" sx={{ fontWeight: 500 }}>
             Commercial Investment Banking
           </Typography>
@@ -338,7 +365,8 @@ const Register = () => {
           )}
         </Formik>
       </Paper>
-    </Container>
+    {/* </Container> */}
+    </>
   );
 };
 
