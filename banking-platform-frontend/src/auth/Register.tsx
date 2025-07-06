@@ -22,14 +22,14 @@ import {
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [userType, setUserType] = useState<"Individual" | "Company">(
     "Individual"
   );
-  const navigate = useNavigate(); // ✅ Initialize navigate
+  const navigate = useNavigate();
 
   const initialValues = {
     username: "",
@@ -64,16 +64,23 @@ const Register = () => {
     };
     console.log("Submitted:", dataToSend);
 
-    // ✅ Show SweetAlert popup and redirect to login
     Swal.fire({
       icon: "success",
       title: "Registration completed successfully",
-      text: "Please Login",
+      text:
+        userType === "Individual"
+          ? "Please complete your KYC to proceed."
+          : "Please Login",
       confirmButtonColor: "#0c3c60",
-      confirmButtonText: "Go to Login",
+      confirmButtonText:
+        userType === "Individual" ? "Go to KYC" : "Go to Login",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/"); //  Redirect to Login page
+        if (userType === "Individual") {
+          navigate("/kyc-submission"); // ✅ Navigate to KYC page
+        } else {
+          navigate("/"); // ✅ Navigate to Login page
+        }
       }
     });
   };

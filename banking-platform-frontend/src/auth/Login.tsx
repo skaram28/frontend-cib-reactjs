@@ -13,7 +13,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import users from "../data/users.json"; // ✅ Import JSON file
+import users from "../data/users.json";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,7 +41,11 @@ const Login = () => {
         text: `Welcome ${matchedUser.username}!`,
         confirmButtonColor: "#0c3c60",
       }).then(() => {
-        navigate("/dashboard");
+        if (matchedUser.role === "Admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       });
     } else {
       Swal.fire({
@@ -65,7 +69,6 @@ const Login = () => {
       }}
     >
       <Paper elevation={4} sx={{ width: "100%", padding: 4, borderRadius: 3 }}>
-        {/* Header */}
         <Box
           sx={{
             backgroundColor: "#000",

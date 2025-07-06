@@ -11,14 +11,26 @@ import {
 } from "@mui/material";
 import fundsData from "../data/funds.json"; // ✅ Import dummy JSON data
 
-const FundSelection = () => {
+// ✅ Define Fund interface for TypeScript safety
+interface Fund {
+  id: number;
+  name: string;
+  sector: string;
+  risk: string;
+  return: string;
+  performance: string;
+}
+
+const FundSelection: React.FC = () => {
   const [sector, setSector] = useState("");
   const [risk, setRisk] = useState("");
   const [performance, setPerformance] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredFunds, setFilteredFunds] = useState(fundsData); // Show all by default
+  const [filteredFunds, setFilteredFunds] = useState<Fund[]>(fundsData);
+  const [selectedFund, setSelectedFund] = useState<Fund | null>(null);
+  const [investmentAmount, setInvestmentAmount] = useState("");
 
-  // 🔎 Handle Search button click
+  // 🔎 Handle Search
   const handleSearch = () => {
     const results = fundsData.filter((fund) => {
       const sectorMatch = sector ? fund.sector === sector : true;
@@ -27,7 +39,7 @@ const FundSelection = () => {
         ? fund.performance === performance
         : true;
       const searchMatch = searchQuery
-        ? fund.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ? fund.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           fund.sector.toLowerCase().includes(searchQuery.toLowerCase())
         : true;
 
@@ -35,6 +47,23 @@ const FundSelection = () => {
     });
 
     setFilteredFunds(results);
+  };
+
+  // 🔎 Handle selecting a fund
+  const handleFundClick = (fund: Fund) => {
+    setSelectedFund(fund);
+  };
+
+  // 🔎 Handle investing
+  const handleInvest = () => {
+    if (!investmentAmount) {
+      alert("Please enter an amount.");
+      return;
+    }
+    alert(
+      `Invested ₹${investmentAmount} in ${selectedFund?.name} (${selectedFund?.sector})`
+    );
+    setInvestmentAmount("");
   };
 
   return (
@@ -102,43 +131,85 @@ const FundSelection = () => {
 
       {/* Funds Grid */}
       <Grid container spacing={3}>
-        {filteredFunds.map((fund) => (
-          <Grid item xs={12} sm={6} md={3} key={fund.id}>
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {fund.company}
-              </Typography>
-              <Typography variant="body2">Sector: {fund.sector}</Typography>
-              <Typography variant="body2">Risk Profile: {fund.risk}</Typography>
-              <Typography variant="body2">
-                Performance: {fund.performance}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                <Typography variant="h6">{fund.return}</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        ))}
+        {filteredFunds.map((fund) => {
+          const isPositive = fund.return.startsWith("+");
+          return (
+            <Grid item xs={12} sm={6} md={3} key={fund.id}>
+              <Paper
+                sx={{ p: 2, cursor: "pointer" }}
+                onClick={() => handleFundClick(fund)}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {fund.name}
+                </Typography>
+                <Typography variant="body2">Sector: {fund.sector}</Typography>
+                <Typography variant="body2">Risk: {fund.risk}</Typography>
+                <Typography variant="body2">
+                  Performance: {fund.performance}
+                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: isPositive ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {fund.return}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          );
+        })}
 
         {/* Investment Box */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-              Investment
-            </Typography>
-            <TextField label="Amount" fullWidth sx={{ mb: 2 }} />
-            <Typography variant="body2" gutterBottom>
-              Fee: $10.00
-            </Typography>
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{ backgroundColor: "#0c3c60" }}
-            >
-              Invest
-            </Button>
-          </Paper>
-        </Grid>
+        {selectedFund && (
+          <Grid item xs={12} sm={6} md={3}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                Investment - {selectedFund.name}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Sector: {selectedFund.sector}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Fund ID: {selectedFund.id}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Risk: {selectedFund.risk}
+              </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: selectedFund.return.startsWith("+") ? "green" : "red",
+                  fontWeight: "bold",
+                  mb: 2,
+                }}
+              >
+                {selectedFund.return}
+              </Typography>
+              <TextField
+                label="Amount"
+                fullWidth
+                value={investmentAmount}
+                onChange={(e) => setInvestmentAmount(e.target.value)}
+                sx={{ mb: 2 }}
+              />
+              <Typography variant="body2" gutterBottom>
+                Fee: ₹10.00
+              </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ backgroundColor: "#0c3c60" }}
+                onClick={handleInvest}
+              >
+                Invest
+              </Button>
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );
