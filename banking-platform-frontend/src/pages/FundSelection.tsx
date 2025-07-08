@@ -9,9 +9,8 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import fundsData from "../data/funds.json"; // ✅ Import dummy JSON data
+import fundsData from "../data/funds.json";
 
-// ✅ Define Fund interface for TypeScript safety
 interface Fund {
   id: number;
   name: string;
@@ -30,7 +29,6 @@ const FundSelection: React.FC = () => {
   const [selectedFund, setSelectedFund] = useState<Fund | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
 
-  // 🔎 Handle Search
   const handleSearch = () => {
     const results = fundsData.filter((fund) => {
       const sectorMatch = sector ? fund.sector === sector : true;
@@ -49,12 +47,10 @@ const FundSelection: React.FC = () => {
     setFilteredFunds(results);
   };
 
-  // 🔎 Handle selecting a fund
   const handleFundClick = (fund: Fund) => {
     setSelectedFund(fund);
   };
 
-  // 🔎 Handle investing
   const handleInvest = () => {
     if (!investmentAmount) {
       alert("Please enter an amount.");
@@ -129,43 +125,59 @@ const FundSelection: React.FC = () => {
         </Button>
       </Box>
 
-      {/* Funds Grid */}
-      <Grid container spacing={3}>
-        {filteredFunds.map((fund) => {
-          const isPositive = fund.return.startsWith("+");
-          return (
-            <Grid item xs={12} sm={6} md={3} key={fund.id}>
-              <Paper
-                sx={{ p: 2, cursor: "pointer" }}
-                onClick={() => handleFundClick(fund)}
-              >
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {fund.name}
-                </Typography>
-                <Typography variant="body2">Sector: {fund.sector}</Typography>
-                <Typography variant="body2">Risk: {fund.risk}</Typography>
-                <Typography variant="body2">
-                  Performance: {fund.performance}
-                </Typography>
-                <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      color: isPositive ? "green" : "red",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {fund.return}
+      {/* Main Content with Investment Box Fixed */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        {/* Funds Grid */}
+        <Grid container spacing={3} sx={{ flex: 1 }}>
+          {filteredFunds.map((fund) => {
+            const isPositive = fund.return.startsWith("+");
+            return (
+              <Grid item xs={12} sm={6} md={4} key={fund.id}>
+                <Paper
+                  sx={{ p: 2, cursor: "pointer" }}
+                  onClick={() => handleFundClick(fund)}
+                >
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {fund.name}
                   </Typography>
-                </Box>
-              </Paper>
-            </Grid>
-          );
-        })}
+                  <Typography variant="body2">Sector: {fund.sector}</Typography>
+                  <Typography variant="body2">Risk: {fund.risk}</Typography>
+                  <Typography variant="body2">
+                    Performance: {fund.performance}
+                  </Typography>
+                  <Box sx={{ mt: 1 }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        color: isPositive ? "green" : "red",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {fund.return}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Grid>
+            );
+          })}
+        </Grid>
 
-        {/* Investment Box */}
-        {selectedFund && (
-          <Grid item xs={12} sm={6} md={3}>
+        {/* Investment Box - Fixed on Right */}
+        <Box
+          sx={{
+            width: { xs: "100%", md: 300 },
+            position: { md: "sticky" },
+            top: { md: 100 },
+            alignSelf: "flex-start",
+          }}
+        >
+          {selectedFund && (
             <Paper sx={{ p: 2 }}>
               <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                 Investment - {selectedFund.name}
@@ -208,9 +220,9 @@ const FundSelection: React.FC = () => {
                 Invest
               </Button>
             </Paper>
-          </Grid>
-        )}
-      </Grid>
+          )}
+        </Box>
+      </Box>
     </Container>
   );
 };

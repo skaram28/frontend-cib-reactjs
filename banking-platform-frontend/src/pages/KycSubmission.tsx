@@ -11,7 +11,6 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Numbers } from "@mui/icons-material";
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const KYCSubmission = () => {
@@ -31,23 +30,8 @@ const KYCSubmission = () => {
     panFile: Yup.mixed().required("PAN File is required"),
   });
 
-  const handleSubmit = async (values: typeof initialValues) => {
-    console.log("Mock Submission Data:", values);
-
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    Swal.fire({
-      icon: "success",
-      title: "KYC Submitted Successfully",
-      text: "After verification you will proceed.",
-      confirmButtonColor: "#0c3c60",
-      confirmButtonText: "OK",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/"); // Redirect to login page
-      }
-    });
+  const handleSubmit = (values: typeof initialValues) => {
+    navigate("/kyc-confirmation", { state: values });
   };
 
   return (
@@ -73,7 +57,6 @@ const KYCSubmission = () => {
         >
           {({ handleChange, setFieldValue, errors, touched, values }) => (
             <Form>
-              {/* Aadhaar Number */}
               <TextField
                 fullWidth
                 margin="normal"
@@ -92,7 +75,6 @@ const KYCSubmission = () => {
                 }}
               />
 
-              {/* Aadhaar File */}
               <Box mt={2}>
                 <Typography variant="body2" sx={{ mb: 1 }}>
                   Upload Aadhaar File
@@ -101,8 +83,8 @@ const KYCSubmission = () => {
                   name="aadhaarFile"
                   type="file"
                   accept=".pdf,.png,.jpg,.jpeg"
-                  onChange={(event) =>
-                    setFieldValue("aadhaarFile", event.currentTarget.files?.[0])
+                  onChange={(e) =>
+                    setFieldValue("aadhaarFile", e.currentTarget.files?.[0])
                   }
                 />
                 {values.aadhaarFile && (
@@ -117,7 +99,6 @@ const KYCSubmission = () => {
                 )}
               </Box>
 
-              {/* PAN Number */}
               <TextField
                 fullWidth
                 margin="normal"
@@ -136,7 +117,6 @@ const KYCSubmission = () => {
                 }}
               />
 
-              {/* PAN File */}
               <Box mt={2}>
                 <Typography variant="body2" sx={{ mb: 1 }}>
                   Upload PAN File
@@ -145,8 +125,8 @@ const KYCSubmission = () => {
                   name="panFile"
                   type="file"
                   accept=".pdf,.png,.jpg,.jpeg"
-                  onChange={(event) =>
-                    setFieldValue("panFile", event.currentTarget.files?.[0])
+                  onChange={(e) =>
+                    setFieldValue("panFile", e.currentTarget.files?.[0])
                   }
                 />
                 {values.panFile && (
