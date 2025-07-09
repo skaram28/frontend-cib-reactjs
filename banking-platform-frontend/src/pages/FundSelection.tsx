@@ -7,7 +7,28 @@ import {
   MenuItem,
   Paper,
   Button,
+  Card,
+  CardContent,
+  Chip,
+  InputAdornment,
+  Rating,
+  Divider,
+  Avatar,
 } from "@mui/material";
+import {
+  Search as SearchIcon,
+  TrendingUp,
+  TrendingDown,
+  FilterList,
+  BusinessCenter,
+  LocalHospital,
+  Computer,
+  Home,
+  Assessment,
+  CheckCircle,
+  Security,
+  Timeline,
+} from "@mui/icons-material";
 import fundsData from "../data/funds.json";
 
 interface Fund {
@@ -27,14 +48,13 @@ const FundSelection: React.FC = () => {
   const [filteredFunds, setFilteredFunds] = useState<Fund[]>(fundsData);
   const [selectedFund, setSelectedFund] = useState<Fund | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleSearch = () => {
     const results = fundsData.filter((fund) => {
       const sectorMatch = sector ? fund.sector === sector : true;
       const riskMatch = risk ? fund.risk === risk : true;
-      const performanceMatch = performance
-        ? fund.performance === performance
-        : true;
+      const performanceMatch = performance ? fund.performance === performance : true;
       const searchMatch = searchQuery
         ? fund.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           fund.sector.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,188 +75,437 @@ const FundSelection: React.FC = () => {
       alert("Please enter an amount.");
       return;
     }
-    alert(
-      `Invested ₹${investmentAmount} in ${selectedFund?.name} (${selectedFund?.sector})`
-    );
+    alert(`Invested ₹${investmentAmount} in ${selectedFund?.name} (${selectedFund?.sector})`);
     setInvestmentAmount("");
   };
 
+  const getSectorIcon = (sector: string) => {
+    switch (sector) {
+      case "Technology":
+        return <Computer sx={{ color: "#1976d2" }} />;
+      case "Healthcare":
+        return <LocalHospital sx={{ color: "#388e3c" }} />;
+      case "Energy":
+        return <Assessment sx={{ color: "#f57c00" }} />;
+      case "Real Estate":
+        return <Home sx={{ color: "#7b1fa2" }} />;
+      default:
+        return <BusinessCenter sx={{ color: "#424242" }} />;
+    }
+  };
+
+  const getRiskColor = (risk: string): "success" | "warning" | "error" | "default" => {
+    switch (risk) {
+      case "Low":
+        return "success";
+      case "Medium":
+        return "warning";
+      case "High":
+        return "error";
+      default:
+        return "default";
+    }
+  };
+
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Fund Selection
-      </Typography>
-
-      {/* Filters */}
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
-        <TextField
-          select
-          label="Sector"
-          value={sector}
-          onChange={(e) => setSector(e.target.value)}
-          sx={{ minWidth: 150 }}
-        >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="Energy">Energy</MenuItem>
-          <MenuItem value="Healthcare">Healthcare</MenuItem>
-          <MenuItem value="Technology">Technology</MenuItem>
-          <MenuItem value="Real Estate">Real Estate</MenuItem>
-        </TextField>
-
-        <TextField
-          select
-          label="Risk"
-          value={risk}
-          onChange={(e) => setRisk(e.target.value)}
-          sx={{ minWidth: 150 }}
-        >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="Low">Low</MenuItem>
-          <MenuItem value="Medium">Medium</MenuItem>
-          <MenuItem value="High">High</MenuItem>
-        </TextField>
-
-        <TextField
-          select
-          label="Performance"
-          value={performance}
-          onChange={(e) => setPerformance(e.target.value)}
-          sx={{ minWidth: 150 }}
-        >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="last1year">Last 1 Year</MenuItem>
-          <MenuItem value="last30days">Last 30 Days</MenuItem>
-        </TextField>
-
-        <TextField
-          label="Search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{ minWidth: 200 }}
-        />
-
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#0c3c60" }}
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
-      </Box>
-
-      {/* Main Content without Grid */}
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+      {/* Header */}
       <Box
         sx={{
-          display: "flex",
-          gap: 3,
-          flexDirection: { xs: "column", md: "row" },
+          background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 50%, #9c27b0 100%)",
+          color: "white",
+          py: 8,
+          mb: 3,
         }}
       >
-        {/* Funds Cards */}
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 2,
-            flex: 1,
-          }}
-        >
-          {filteredFunds.map((fund) => {
-            const isPositive = fund.return.startsWith("+");
-            return (
-              <Paper
-                key={fund.id}
-                sx={{
-                  p: 2,
-                  cursor: "pointer",
-                  width: {
-                    xs: "100%",
-                    sm: "calc(50% - 8px)",
-                    md: "calc(33.33% - 10px)",
-                  },
-                }}
-                onClick={() => handleFundClick(fund)}
+        <Container maxWidth="lg">
+          <Box sx={{ textAlign: "center" }}>
+            <Avatar
+              sx={{
+                width: 80,
+                height: 80,
+                bgcolor: "rgba(255,255,255,0.2)",
+                mx: "auto",
+                mb: 3,
+              }}
+            >
+              <TrendingUp sx={{ fontSize: 40 }} />
+            </Avatar>
+            <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom>
+              Fund Selection Hub
+            </Typography>
+            <Typography variant="h6" sx={{ mb: 4, color: "rgba(255,255,255,0.9)" }}>
+              Discover and invest in top-performing funds with intelligent
+              <br />
+              analytics and real-time insights
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <CheckCircle sx={{ color: "#4caf50", fontSize: 20 }} />
+                <Typography variant="body2">Verified Funds</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Security sx={{ color: "#2196f3", fontSize: 20 }} />
+                <Typography variant="body2">Secure Investments</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Timeline sx={{ color: "#9c27b0", fontSize: 20 }} />
+                <Typography variant="body2">Real-time Analytics</Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      <Container maxWidth="lg">
+        {/* Search Section */}
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              fullWidth
+              placeholder="Search funds by name, sector, or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 2 }}
+            />
+
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                startIcon={<FilterList />}
+                onClick={() => setShowFilters(!showFilters)}
+                variant="text"
+                sx={{ color: "#1976d2" }}
               >
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {fund.name}
-                </Typography>
-                <Typography variant="body2">Sector: {fund.sector}</Typography>
-                <Typography variant="body2">Risk: {fund.risk}</Typography>
-                <Typography variant="body2">
-                  Performance: {fund.performance}
-                </Typography>
-                <Box sx={{ mt: 1 }}>
-                  <Typography
-                    variant="h5"
+                Advanced Filters
+              </Button>
+            </Box>
+
+            {showFilters && (
+              <Box>
+                <Divider sx={{ mb: 2 }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                  }}
+                >
+                  <TextField
+                    select
+                    label="Sector"
+                    value={sector}
+                    onChange={(e) => setSector(e.target.value)}
+                    sx={{ minWidth: 150 }}
+                  >
+                    <MenuItem value="">All Sectors</MenuItem>
+                    <MenuItem value="Technology">Technology</MenuItem>
+                    <MenuItem value="Healthcare">Healthcare</MenuItem>
+                    <MenuItem value="Energy">Energy</MenuItem>
+                    <MenuItem value="Real Estate">Real Estate</MenuItem>
+                  </TextField>
+
+                  <TextField
+                    select
+                    label="Risk"
+                    value={risk}
+                    onChange={(e) => setRisk(e.target.value)}
+                    sx={{ minWidth: 150 }}
+                  >
+                    <MenuItem value="">All Risk Levels</MenuItem>
+                    <MenuItem value="Low">Low</MenuItem>
+                    <MenuItem value="Medium">Medium</MenuItem>
+                    <MenuItem value="High">High</MenuItem>
+                  </TextField>
+
+                  <TextField
+                    select
+                    label="Performance"
+                    value={performance}
+                    onChange={(e) => setPerformance(e.target.value)}
+                    sx={{ minWidth: 150 }}
+                  >
+                    <MenuItem value="">All Performance</MenuItem>
+                    <MenuItem value="last1year">Last 1 Year</MenuItem>
+                    <MenuItem value="last30days">Last 30 Days</MenuItem>
+                  </TextField>
+
+                  <Button
+                    variant="contained"
+                    onClick={handleSearch}
+                    sx={{ backgroundColor: "#1976d2", minWidth: 100 }}
+                  >
+                    Search
+                  </Button>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </Paper>
+
+        {/* Results Header */}
+        <Paper sx={{ p: 2, mb: 3, bgcolor: "#1976d2", color: "white" }}>
+          <Typography variant="h6">
+            Showing {filteredFunds.length} premium funds
+          </Typography>
+        </Paper>
+
+        {/* Main Content */}
+        <Box sx={{ display: "flex", gap: 3 }}>
+          {/* Funds Cards */}
+          <Box sx={{ flex: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                "& > *": {
+                  width: { xs: "100%", sm: "calc(50% - 8px)" },
+                },
+              }}
+            >
+              {filteredFunds.map((fund) => {
+                const isPositive = fund.return.startsWith("+");
+                const isSelected = selectedFund?.id === fund.id;
+                
+                return (
+                  <Card
+                    key={fund.id}
+                    onClick={() => handleFundClick(fund)}
                     sx={{
-                      color: isPositive ? "green" : "red",
-                      fontWeight: "bold",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: 4,
+                      },
+                      border: isSelected ? "2px solid #1976d2" : "1px solid #e0e0e0",
+                      position: "relative",
                     }}
                   >
-                    {fund.return}
-                  </Typography>
-                </Box>
-              </Paper>
-            );
-          })}
-        </Box>
+                    {isSelected && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          width: 12,
+                          height: 12,
+                          borderRadius: "50%",
+                          bgcolor: "#1976d2",
+                        }}
+                      />
+                    )}
+                    <CardContent>
+                      {/* Header */}
+                      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                          <Avatar sx={{ bgcolor: "#f5f5f5", width: 48, height: 48 }}>
+                            {getSectorIcon(fund.sector)}
+                          </Avatar>
+                          <Box>
+                            <Typography variant="subtitle1" fontWeight="bold">
+                              {fund.name}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              Fund ID: {fund.id}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <Rating value={4} readOnly size="small" />
+                          <Typography variant="caption">(4.0)</Typography>
+                        </Box>
+                      </Box>
 
-        {/* Investment Box */}
-        <Box
-          sx={{
-            width: { xs: "100%", md: 300 },
-            position: { md: "sticky" },
-            top: { md: 100 },
-            alignSelf: "flex-start",
-          }}
-        >
+                      {/* Description */}
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2 }}
+                      >
+                        {fund.sector} sector fund with professional management
+                      </Typography>
+
+                      {/* Tags */}
+                      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
+                        <Chip
+                          label={fund.sector}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                        <Chip
+                          label={fund.risk}
+                          size="small"
+                          color={getRiskColor(fund.risk)}
+                          variant="outlined"
+                        />
+                      </Box>
+
+                      {/* Details */}
+                      <Box sx={{ mb: 2 }}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                          <Typography variant="body2" color="text.secondary">
+                            Sector:
+                          </Typography>
+                          <Typography variant="body2" fontWeight="medium">
+                            {fund.sector}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                          <Typography variant="body2" color="text.secondary">
+                            Risk Level:
+                          </Typography>
+                          <Typography variant="body2" fontWeight="medium">
+                            {fund.risk}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                          <Typography variant="body2" color="text.secondary">
+                            Performance:
+                          </Typography>
+                          <Typography variant="body2" fontWeight="medium">
+                            {fund.performance === "last1year" ? "1 Year" : "30 Days"}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Return */}
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <Typography variant="body2" color="text.secondary">
+                          Return
+                        </Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          {isPositive ? (
+                            <TrendingUp sx={{ color: "#4caf50", fontSize: 20 }} />
+                          ) : (
+                            <TrendingDown sx={{ color: "#f44336", fontSize: 20 }} />
+                          )}
+                          <Typography
+                            variant="h5"
+                            fontWeight="bold"
+                            sx={{ color: isPositive ? "#4caf50" : "#f44336" }}
+                          >
+                            {fund.return}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </Box>
+          </Box>
+
+          {/* Investment Panel */}
           {selectedFund && (
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                Investment - {selectedFund.name}
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Sector: {selectedFund.sector}
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Fund ID: {selectedFund.id}
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Risk: {selectedFund.risk}
-              </Typography>
-              <Typography
-                variant="h5"
+            <Box sx={{ width: 320, flexShrink: 0 }}>
+              <Paper
                 sx={{
-                  color: selectedFund.return.startsWith("+") ? "green" : "red",
-                  fontWeight: "bold",
-                  mb: 2,
+                  p: 3,
+                  position: "sticky",
+                  top: 24,
                 }}
               >
-                {selectedFund.return}
-              </Typography>
-              <TextField
-                label="Amount"
-                fullWidth
-                value={investmentAmount}
-                onChange={(e) => setInvestmentAmount(e.target.value)}
-                sx={{ mb: 2 }}
-              />
-              <Typography variant="body2" gutterBottom>
-                Fee: ₹10.00
-              </Typography>
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{ backgroundColor: "#0c3c60" }}
-                onClick={handleInvest}
-              >
-                Invest
-              </Button>
-            </Paper>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Investment - {selectedFund.name}
+                </Typography>
+
+                <Box sx={{ mb: 3 }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Sector:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {selectedFund.sector}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Fund ID:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {selectedFund.id}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Risk:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {selectedFund.risk}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Performance:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="medium">
+                      {selectedFund.performance === "last1year" ? "1 Year" : "30 Days"}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Paper
+                  sx={{
+                    p: 2,
+                    textAlign: "center",
+                    mb: 3,
+                    bgcolor: selectedFund.return.startsWith("+") ? "#e8f5e8" : "#ffeaea",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    sx={{
+                      color: selectedFund.return.startsWith("+") ? "#4caf50" : "#f44336",
+                    }}
+                  >
+                    {selectedFund.return}
+                  </Typography>
+                </Paper>
+
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Investment Amount
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    value={investmentAmount}
+                    onChange={(e) => setInvestmentAmount(e.target.value)}
+                    placeholder="Enter amount"
+                    sx={{ mb: 2 }}
+                  />
+                  <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Fee:
+                    </Typography>
+                    <Typography variant="body2">₹10.00</Typography>
+                  </Box>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={handleInvest}
+                    sx={{ backgroundColor: "#1976d2", py: 1.5 }}
+                  >
+                    Invest
+                  </Button>
+                </Box>
+              </Paper>
+            </Box>
           )}
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
