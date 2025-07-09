@@ -14,38 +14,28 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-
-// ✅ Import dummy data
-import portfolioData from "../data/portfolioData.json";
-
-interface Transaction {
-  fundsId: string;
-  date: string;
-  status: string;
-  amount: string;
-}
-
-interface Portfolio {
-  id: string;
-  portfolioNumber: string;
-  portfolioType: string;
-  status: string;
-  startDate: string;
-  updateddate: string | null;
-  enddate: string | null;
-}
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
+import { fetchTransactions, getTransactionData } from "../slices/transactionSlice";
 
 const TransactionPage: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [search, setSearch] = useState("");
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [portfolio, setPortfolio] = useState<Portfolio[]>([]);
+
+  //  Redux dispatch
+  const dispatch = useAppDispatch();
+
+  // Redux state  portfolio selector
+  const portfolio = useAppSelector(getPortfolioData);
+
+  // Redux state  transactions selector
+  const transactions = useAppSelector(getTransactionData);
 
   useEffect(() => {
-    // ✅ Load mock data
-    setTransactions(portfolioData.transactions);
-    setPortfolio(portfolioData.portfolio);
-  }, []);
+    dispatch(fetchTransactions());
+    dispatch(fetchPortfolios());
+
+  }, [dispatch]);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
@@ -156,7 +146,7 @@ const TransactionPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {portfolio.map((item, index) => (
+              {portfolio?.length > 0 && portfolio.map((item: any, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.portfolioNumber}</TableCell>
