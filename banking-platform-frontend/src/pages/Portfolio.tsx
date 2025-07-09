@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
   InputAdornment,
@@ -10,11 +9,11 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TableSortLabel,
   Tabs,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
 
 // ✅ Import dummy data
 import portfolioData from "../data/portfolioData.json";
@@ -48,13 +47,13 @@ const TransactionPage: React.FC = () => {
     setPortfolio(portfolioData.portfolio);
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
   const filteredTransactions = transactions.filter((row) =>
     Object.values(row).some((val) =>
-      val.toLowerCase().includes(search.toLowerCase())
+      val.toString().toLowerCase().includes(search.toLowerCase())
     )
   );
 
@@ -92,19 +91,15 @@ const TransactionPage: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>
-                    <TableSortLabel active direction="asc" />
                     <b>Fund ID</b>
                   </TableCell>
                   <TableCell>
-                    <TableSortLabel active direction="asc" />
                     <b>Date</b>
                   </TableCell>
                   <TableCell>
-                    <TableSortLabel active direction="asc" />
                     <b>Status</b>
                   </TableCell>
                   <TableCell>
-                    <TableSortLabel active direction="asc" />
                     <b>Amount</b>
                   </TableCell>
                 </TableRow>

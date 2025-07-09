@@ -25,13 +25,25 @@ import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+interface RegisterValues {
+  username: string;
+  password: string;
+  email: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  companyName: string;
+  registrationNumber: string;
+  kycDocument: File | null;
+}
+
 const Register = () => {
   const [userType, setUserType] = useState<"Individual" | "Company">(
     "Individual"
   );
   const navigate = useNavigate();
 
-  const initialValues = {
+  const initialValues: RegisterValues = {
     username: "",
     password: "",
     email: "",
@@ -57,7 +69,7 @@ const Register = () => {
     }),
   });
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: RegisterValues) => {
     const dataToSend = {
       ...values,
       userType,
@@ -328,7 +340,7 @@ const Register = () => {
                         onChange={(event) =>
                           setFieldValue(
                             "kycDocument",
-                            event.currentTarget.files?.[0]
+                            event.currentTarget.files?.[0] || null
                           )
                         }
                       />

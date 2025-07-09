@@ -6,7 +6,7 @@ import Home from "../layout/Home";
 import Dashboard from "../pages/Dashboard";
 import FundSelection from "../pages/FundSelection";
 import Portfolio from "../pages/Portfolio";
-import KYCSubmission from "../pages/KYCSubmission";
+import KycSubmission from "../pages/KycSubmission"; // ✅ updated casing to match file
 import KycConfirmation from "../pages/KycConfirmation";
 import KycStatus from "../pages/KycStatus";
 import AdminDashboard from "../pages/AdminDashboard";
@@ -18,19 +18,17 @@ const AppRouter = () => (
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgetPassword />} />
-
       {/* KYC flow routes */}
-      <Route path="/kyc-submission" element={<KYCSubmission />} />
+      <Route path="/kyc-submission" element={<KycSubmission />} />{" "}
+      {/* ✅ updated */}
       <Route path="/kyc-confirmation" element={<KycConfirmation />} />
       <Route path="/kyc-status" element={<KycStatus />} />
-
       {/* User protected routes under Home layout */}
       <Route path="/" element={<Home />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="fund-selection" element={<FundSelection />} />
         <Route path="portfolio" element={<Portfolio />} />
       </Route>
-
       {/* Admin dashboard route */}
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
     </Routes>

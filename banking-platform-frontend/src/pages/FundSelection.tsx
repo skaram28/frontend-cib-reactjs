@@ -5,7 +5,6 @@ import {
   Typography,
   TextField,
   MenuItem,
-  Grid,
   Paper,
   Button,
 } from "@mui/material";
@@ -125,7 +124,7 @@ const FundSelection: React.FC = () => {
         </Button>
       </Box>
 
-      {/* Main Content with Investment Box Fixed */}
+      {/* Main Content without Grid */}
       <Box
         sx={{
           display: "flex",
@@ -133,42 +132,56 @@ const FundSelection: React.FC = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        {/* Funds Grid */}
-        <Grid container spacing={3} sx={{ flex: 1 }}>
+        {/* Funds Cards */}
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            flex: 1,
+          }}
+        >
           {filteredFunds.map((fund) => {
             const isPositive = fund.return.startsWith("+");
             return (
-              <Grid item xs={12} sm={6} md={4} key={fund.id}>
-                <Paper
-                  sx={{ p: 2, cursor: "pointer" }}
-                  onClick={() => handleFundClick(fund)}
-                >
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {fund.name}
+              <Paper
+                key={fund.id}
+                sx={{
+                  p: 2,
+                  cursor: "pointer",
+                  width: {
+                    xs: "100%",
+                    sm: "calc(50% - 8px)",
+                    md: "calc(33.33% - 10px)",
+                  },
+                }}
+                onClick={() => handleFundClick(fund)}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {fund.name}
+                </Typography>
+                <Typography variant="body2">Sector: {fund.sector}</Typography>
+                <Typography variant="body2">Risk: {fund.risk}</Typography>
+                <Typography variant="body2">
+                  Performance: {fund.performance}
+                </Typography>
+                <Box sx={{ mt: 1 }}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: isPositive ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {fund.return}
                   </Typography>
-                  <Typography variant="body2">Sector: {fund.sector}</Typography>
-                  <Typography variant="body2">Risk: {fund.risk}</Typography>
-                  <Typography variant="body2">
-                    Performance: {fund.performance}
-                  </Typography>
-                  <Box sx={{ mt: 1 }}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: isPositive ? "green" : "red",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {fund.return}
-                    </Typography>
-                  </Box>
-                </Paper>
-              </Grid>
+                </Box>
+              </Paper>
             );
           })}
-        </Grid>
+        </Box>
 
-        {/* Investment Box - Fixed on Right */}
+        {/* Investment Box */}
         <Box
           sx={{
             width: { xs: "100%", md: 300 },

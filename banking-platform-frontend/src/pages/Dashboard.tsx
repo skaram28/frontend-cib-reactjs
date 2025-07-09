@@ -1,21 +1,26 @@
-import { Box, Grid, Paper, Typography, Divider, Button } from "@mui/material";
+import { Box, Paper, Typography, Divider, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import dashboardData from "../data/dashboard.json"; // Adjust path accordingly
+import dashboardData from "../data/dashboard.json";
+
+interface DashboardData {
+  totalInvestment: number;
+  returnsThisYear: number;
+  activeFunds: number;
+  riskProfile: string;
+  recentTransactions: string[];
+}
 
 const Dashboard = () => {
   const [userName, setUserName] = useState<string>("");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
 
   useEffect(() => {
-    // Fetch user from localStorage
     const user = localStorage.getItem("loggedInUser");
     if (user) {
       const userData = JSON.parse(user);
       setUserName(userData.username);
     }
-
-    // Fetch dashboard data from JSON
-    setData(dashboardData);
+    setData(dashboardData as DashboardData);
   }, []);
 
   if (!data) return null;
@@ -30,86 +35,112 @@ const Dashboard = () => {
         Here is your portfolio overview.
       </Typography>
 
-      {/* Summary Cards */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle2">Total Investment</Typography>
-            <Typography variant="h6" fontWeight="bold">
-              ${data.totalInvestment}
+      {/* Summary Cards without Grid */}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
+        {[
+          {
+            label: "Total Investment",
+            value: `$${data.totalInvestment}`,
+          },
+          {
+            label: "Returns (This Year)",
+            value: `+${data.returnsThisYear}%`,
+            color: "green",
+          },
+          {
+            label: "Active Funds",
+            value: data.activeFunds,
+          },
+          {
+            label: "Risk Profile",
+            value: data.riskProfile,
+            color: "orange",
+          },
+        ].map((item, idx) => (
+          <Paper
+            key={idx}
+            elevation={3}
+            sx={{
+              p: 2,
+              flex: "1 1 calc(25% - 16px)",
+              minWidth: "200px",
+            }}
+          >
+            <Typography variant="subtitle2">{item.label}</Typography>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              color={item.color || "initial"}
+            >
+              {item.value}
             </Typography>
           </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle2">Returns (This Year)</Typography>
-            <Typography variant="h6" fontWeight="bold" color="green">
-              +{data.returnsThisYear}%
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle2">Active Funds</Typography>
-            <Typography variant="h6" fontWeight="bold">
-              {data.activeFunds}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle2">Risk Profile</Typography>
-            <Typography variant="h6" fontWeight="bold" color="orange">
-              {data.riskProfile}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+        ))}
+      </Box>
 
       <Divider sx={{ my: 4 }} />
 
-      {/* Placeholder for Charts */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              Portfolio Performance
-            </Typography>
-            <Box
-              sx={{
-                height: 200,
-                backgroundColor: "#f0f0f0",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              Chart Placeholder
-            </Box>
-          </Paper>
-        </Grid>
+      {/* Performance and Transactions without Grid */}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 3,
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            flex: "1 1 400px",
+            minWidth: "300px",
+          }}
+        >
+          <Typography variant="subtitle1" gutterBottom>
+            Portfolio Performance
+          </Typography>
+          <Box
+            sx={{
+              height: 200,
+              backgroundColor: "#f0f0f0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            Chart Placeholder
+          </Box>
+        </Paper>
 
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              Recent Transactions
-            </Typography>
-            <Box>
-              {data.recentTransactions.map((txn: string, idx: number) => (
-                <Typography key={idx} variant="body2">
-                  - {txn}
-                </Typography>
-              ))}
-            </Box>
-            <Button variant="contained" sx={{ mt: 2 }}>
-              View All Transactions
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            flex: "1 1 400px",
+            minWidth: "300px",
+          }}
+        >
+          <Typography variant="subtitle1" gutterBottom>
+            Recent Transactions
+          </Typography>
+          <Box>
+            {data.recentTransactions.map((txn, idx) => (
+              <Typography key={idx} variant="body2">
+                - {txn}
+              </Typography>
+            ))}
+          </Box>
+          <Button variant="contained" sx={{ mt: 2 }}>
+            View All Transactions
+          </Button>
+        </Paper>
+      </Box>
     </Box>
   );
 };

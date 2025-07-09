@@ -14,10 +14,15 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import users from "../data/users.json";
 
+interface LoginValues {
+  username: string;
+  password: string;
+}
+
 const Login = () => {
   const navigate = useNavigate();
 
-  const initialValues = {
+  const initialValues: LoginValues = {
     username: "",
     password: "",
   };
@@ -27,7 +32,7 @@ const Login = () => {
     password: Yup.string().required("Password is required"),
   });
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: LoginValues) => {
     const matchedUser = users.find(
       (user) =>
         user.username === values.username && user.password === values.password
@@ -63,7 +68,6 @@ const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // backgroundColor: "#f5f7fa",
         px: 2,
       }}
     >
@@ -74,7 +78,6 @@ const Login = () => {
           flexDirection: { xs: "column", md: "row" },
           maxWidth: "900px",
           width: "100%",
-          // borderRadius: 3,
           overflow: "hidden",
         }}
       >
