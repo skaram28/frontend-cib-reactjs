@@ -1,12 +1,15 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import portfolioSlice from '../slices/portfolioSlice';
 import transactionSlice from '../slices/transactionSlice';
+import loginSlice from '../slices/loginSlice';
 // import registerReducer from '../redux/registerSlice';
 
 const rootReducer = combineReducers({
 //   register: registerReducer
     portfolio:portfolioSlice,
-    transaction:transactionSlice
+    transaction:transactionSlice,
+    login:loginSlice
+
   
 });
 

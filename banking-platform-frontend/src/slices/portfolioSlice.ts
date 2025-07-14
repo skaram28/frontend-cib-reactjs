@@ -1,8 +1,9 @@
+// src/slices/portfolioSlice.ts
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-import mockData from '../data/portfolioData.json'; 
 import type { RootState } from '../redux/rootReducer';
+import { apiGet } from '../api/axiosInstance'; // ✅ Axios GET helper
 
-// Define the Portfolio type
+// Portfolio Type
 export interface Portfolio {
   id: number | string;
   portfolioNumber: string;
@@ -13,44 +14,35 @@ export interface Portfolio {
   enddate: string | null;
 }
 
-//  Define the state shape
+// State Shape
 interface PortfolioState {
   data: Portfolio[];
   loading: boolean;
   error: string | null;
 }
 
-//  Initial state
+// Initial State
 const initialState: PortfolioState = {
   data: [],
   loading: false,
   error: null,
 };
 
-//  Async thunk to simulate fetching from mock JSON
+// ✅ Async thunk to fetch from real API
 export const fetchPortfolios = createAsyncThunk<Portfolio[]>(
   'portfolio/fetchPortfolios',
   async () => {
-    return new Promise<Portfolio[]>((resolve) => {
-      setTimeout(() => {
-        // Make sure mockData.portfolio is correct in your JSON
-        resolve(mockData.portfolio as Portfolio[]);
-      }, 500);
-    });
-
-    // 🔗 You can replace the above with a real API call:
-    // const response = await axios.get('/api/portfolios');
-    // return response.data;
+    const response = await apiGet('/portfolio'); // 👈 Real API: http://localhost:8083/api/portfolio
+    return response.data;
   }
 );
 
-//  Create the slice
+
+// Slice
 const portfolioSlice = createSlice({
   name: 'portfolio',
   initialState,
-  reducers: {
-    // You can add reducers like addPortfolio here later
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchPortfolios.pending, (state) => {
@@ -68,15 +60,12 @@ const portfolioSlice = createSlice({
   },
 });
 
-//  Selectors
+// Selectors
 export const getPortfolioState = (state: RootState) => state.portfolio;
 export const getPortfolioData = createSelector(
   getPortfolioState,
   (portfolio) => portfolio.data
 );
 
-//  Export reducer
+// Export reducer
 export default portfolioSlice.reducer;
-
-// Optional: export actions if needed in the future
-// export const { addPortfolio, removePortfolio, updatePortfolio } = portfolioSlice.actions;

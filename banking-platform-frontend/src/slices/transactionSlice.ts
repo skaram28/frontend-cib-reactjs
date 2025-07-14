@@ -1,42 +1,40 @@
+// src/slices/transactionSlice.ts
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-import mockData from '../data/portfolioData.json'; 
+import { apiGet } from '../api/axiosInstance';
 import type { RootState } from '../redux/rootReducer';
 
-//  Define the Transaction type (matching mock data)
+// Transaction Type
 export interface Transaction {
   fundsId: string;
   date: string;
   status: string;
-  amount: string; 
+  amount: string; // e.g. "$2.09"
 }
 
-//  Define the state shape
+// State Shape
 interface TransactionState {
   data: Transaction[];
   loading: boolean;
   error: string | null;
 }
 
-//  Initial state
+// Initial State
 const initialState: TransactionState = {
   data: [],
   loading: false,
   error: null,
 };
 
-//  Async thunk to simulate fetching from mock JSON
+// ✅ Async thunk to fetch transactions from API
 export const fetchTransactions = createAsyncThunk<Transaction[]>(
   'transaction/fetchTransactions',
-  async (_param: any) => {
-    return new Promise<Transaction[]>((resolve) => {
-      setTimeout(() => {
-        resolve(mockData.transactions as Transaction[]);
-      }, 500);
-    });
+  async () => {
+    const response = await apiGet('/transactions'); // 👈 Hits http://localhost:8083/api/transactions
+    return response.data;
   }
 );
 
-//  Create the transaction slice
+// Slice
 const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
@@ -60,7 +58,10 @@ const transactionSlice = createSlice({
 
 // Selectors
 export const getTransactionState = (state: RootState) => state.transaction;
-export const getTransactionData = createSelector(getTransactionState, (transaction) => transaction.data);
+export const getTransactionData = createSelector(
+  getTransactionState,
+  (transaction) => transaction.data
+);
 
 // Export reducer
 export default transactionSlice.reducer;
