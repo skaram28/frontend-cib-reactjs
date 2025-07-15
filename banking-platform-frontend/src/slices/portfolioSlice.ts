@@ -32,7 +32,7 @@ const initialState: PortfolioState = {
 export const fetchPortfolios = createAsyncThunk<Portfolio[]>(
   'portfolio/fetchPortfolios',
   async () => {
-    const response = await apiGet('/portfolio'); // 👈 Real API: http://localhost:8083/api/portfolio
+    const response = await apiGet('http://localhost:8083/api/portfolio'); // 👈 Real API: http://localhost:8083/api/portfolio
     return response.data;
   }
 );

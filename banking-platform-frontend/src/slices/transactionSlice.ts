@@ -29,7 +29,7 @@ const initialState: TransactionState = {
 export const fetchTransactions = createAsyncThunk<Transaction[]>(
   'transaction/fetchTransactions',
   async () => {
-    const response = await apiGet('/transactions'); // 👈 Hits http://localhost:8083/api/transactions
+    const response = await apiGet('http://localhost:8083/api/transactions'); // 👈 Hits http://localhost:8083/api/transactions
     return response.data;
   }
 );

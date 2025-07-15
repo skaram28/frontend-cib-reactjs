@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../redux/rootReducer";
 import { apiPost } from "../api/axiosInstance";
