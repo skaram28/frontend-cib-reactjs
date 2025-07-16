@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/api/axiosInstance.ts
 import axios from "axios";
-import BASE_API_URL from "../config/apiConfig";
+// import BASE_API_URL from "../config/apiConfig";
 
 // Create base Axios instance
 const api = axios.create({
-  baseURL: BASE_API_URL,
+  // baseURL: BASE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // Custom GET method
-export const apiGet = (url: string, config = {}) => {
+export const apiGet = (url: string) => {
   return api.request({
     method: "GET",
     url,
@@ -20,7 +21,7 @@ export const apiGet = (url: string, config = {}) => {
 };
 
 // Custom POST method
-export const apiPost = (url: string, data: any, config = {}) => {
+export const apiPost = (url: string, data: any) => {
   return api.request({
     method: "POST",
     url,
