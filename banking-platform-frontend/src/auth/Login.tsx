@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -6,13 +7,22 @@ import {
   Paper,
   InputAdornment,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import { AccountCircle, Lock } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import users from "../data/users.json";
+
+// Redux imports
+import {
+  loginUser,
+  getLoginLoading,
+  getLoginError,
+  getCurrentUser,
+} from "../slices/loginSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 interface LoginValues {
   username: string;
@@ -21,6 +31,11 @@ interface LoginValues {
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const loading = useAppSelector(getLoginLoading);
+  const error = useAppSelector(getLoginError);
+  const user = useAppSelector(getCurrentUser);
 
   const initialValues: LoginValues = {
     username: "",
@@ -33,33 +48,34 @@ const Login = () => {
   });
 
   const handleSubmit = (values: LoginValues) => {
-    const matchedUser = users.find(
-      (user) =>
-        user.username === values.username && user.password === values.password
-    );
+    if (!loading) {
+      dispatch(loginUser(values));
+    }
+  };
 
-    if (matchedUser) {
+  useEffect(() => {
+    if (user) {
       Swal.fire({
         icon: "success",
         title: "Login Successful",
-        text: `Welcome ${matchedUser.username}!`,
+        text: `Welcome ${user.username}!`,
         confirmButtonColor: "#0c3c60",
       }).then(() => {
-        if (matchedUser.role === "Admin") {
-          navigate("/admin-dashboard");
-        } else {
-          navigate("/dashboard");
-        }
+        navigate(user.role === "Admin" ? "/admin-dashboard" : "/dashboard");
       });
-    } else {
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (error) {
       Swal.fire({
         icon: "error",
         title: "Invalid Credentials",
-        text: "Please check your username and password",
+        text: error,
         confirmButtonColor: "#d33",
       });
     }
-  };
+  }, [error]);
 
   return (
     <Box
@@ -110,12 +126,7 @@ const Login = () => {
             </Typography>
           </Box>
 
-          <Typography
-            variant="h6"
-            align="center"
-            fontWeight="bold"
-            gutterBottom
-          >
+          <Typography variant="h6" align="center" fontWeight="bold" gutterBottom>
             Login
           </Typography>
 
@@ -124,16 +135,18 @@ const Login = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ handleChange, errors, touched }) => (
+            {(formik: { values: { username: any; password: any; }; handleChange: any; handleBlur: any; touched: { username: any; password: any; }; errors: { username: any; password: any; }; }) => (
               <Form>
                 <TextField
                   fullWidth
                   margin="normal"
                   label="Username"
                   name="username"
-                  onChange={handleChange}
-                  error={touched.username && Boolean(errors.username)}
-                  helperText={touched.username && errors.username}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.username && Boolean(formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -149,9 +162,11 @@ const Login = () => {
                   label="Password"
                   type="password"
                   name="password"
-                  onChange={handleChange}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -182,8 +197,9 @@ const Login = () => {
                     py: 1.5,
                     fontWeight: 600,
                   }}
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
                 </Button>
 
                 <Box sx={{ mt: 3, textAlign: "center" }}>
