@@ -153,7 +153,7 @@ const TransactionPage: React.FC = () => {
                   <TableCell>{item.portfolioNumber}</TableCell>
                   <TableCell>{item.portfolioType}</TableCell>
                   <TableCell>{item.status}</TableCell>
-                  <TableCell>{item.startDate}</TableCell>
+                  <TableCell>{item.startdate}</TableCell>
                   <TableCell>{item.updateddate ?? "—"}</TableCell>
                   <TableCell>{item.enddate ?? "—"}</TableCell>
                 </TableRow>
