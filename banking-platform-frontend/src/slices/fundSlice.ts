@@ -34,7 +34,8 @@ const initialState: FundState = {
 export const fetchFunds = createAsyncThunk<Fund[]>(
   'fund/fetchFunds',
   async () => {
-    const response = await apiGet('/funds');
+    // const response = await apiGet('/funds');
+     const response = await apiGet('http://localhost:8084/api/funds');
     return response.data;
   }
 );
@@ -54,7 +55,8 @@ export const investInFund = createAsyncThunk<
   'fund/investInFund',
   async ({ fundId, amount, userId }, { rejectWithValue }) => {
     try {
-      const response = await apiPost(`/invest`, {
+      // const response = await apiPost(`/invest`, {
+        const response = await apiPost(`http://localhost:8084/api/funds/${fundId}/invest`, {
         amount,
         userId,
       });

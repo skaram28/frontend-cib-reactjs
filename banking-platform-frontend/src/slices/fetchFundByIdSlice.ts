@@ -29,7 +29,8 @@ export const fetchFundById = createAsyncThunk<Fund, number>(
   'singleFund/fetchFundById',
   async (fundId, { rejectWithValue }) => {
     try {
-      const response = await apiGet(`/singlefunds/${fundId}`);
+      // const response = await apiGet(`/singlefunds/${fundId}`);
+      const response = await apiGet(`http://localhost:8084/api/funds/${fundId}`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || 'Failed to fetch fund');
