@@ -12,9 +12,10 @@
     "name": "Healthcare",
     "sector": "Healthcare",
     "risk": "Low",
-    "return": "+8.9%",
+    "return": "-8.9%",
     "performance": "last30days"
   },
+
   {
     "id": 3,
     "name": "Energy",

@@ -10,15 +10,20 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
+interface ForgotPasswordValues {
+  email: string;
+}
+
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
-  const initialValues = { email: "" };
+  const initialValues: ForgotPasswordValues = { email: "" };
+
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Required"),
   });
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: ForgotPasswordValues) => {
     console.log("Forgot Password Request:", values);
     // API call here
   };
@@ -88,7 +93,7 @@ const ForgotPassword = () => {
                 fullWidth
                 variant="outlined"
                 sx={{ mt: 2 }}
-                onClick={() => navigate("/")} // ✅ Fix for "Back to Login"
+                onClick={() => navigate("/")}
               >
                 Back to Login
               </Button>
