@@ -126,7 +126,12 @@ const Login = () => {
             </Typography>
           </Box>
 
-          <Typography variant="h6" align="center" fontWeight="bold" gutterBottom>
+          <Typography
+            variant="h6"
+            align="center"
+            fontWeight="bold"
+            gutterBottom
+          >
             Login
           </Typography>
 
@@ -135,18 +140,16 @@ const Login = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {(formik: { values: { username: any; password: any; }; handleChange: any; handleBlur: any; touched: { username: any; password: any; }; errors: { username: any; password: any; }; }) => (
+            {({ handleChange, errors, touched }) => (
               <Form>
                 <TextField
                   fullWidth
                   margin="normal"
                   label="Username"
                   name="username"
-                  value={formik.values.username}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.username && Boolean(formik.errors.username)}
-                  helperText={formik.touched.username && formik.errors.username}
+                  onChange={handleChange}
+                  error={touched.username && Boolean(errors.username)}
+                  helperText={touched.username && errors.username}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -162,11 +165,9 @@ const Login = () => {
                   label="Password"
                   type="password"
                   name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.password && Boolean(formik.errors.password)}
-                  helperText={formik.touched.password && formik.errors.password}
+                  onChange={handleChange}
+                  error={touched.password && Boolean(errors.password)}
+                  helperText={touched.password && errors.password}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -197,9 +198,8 @@ const Login = () => {
                     py: 1.5,
                     fontWeight: 600,
                   }}
-                  disabled={loading}
                 >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+                  Login
                 </Button>
 
                 <Box sx={{ mt: 3, textAlign: "center" }}>
