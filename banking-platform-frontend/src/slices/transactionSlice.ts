@@ -34,7 +34,7 @@ export const fetchTransactions = createAsyncThunk<Transaction[]>(
   "transaction/fetchTransactions",
   async () => {
    // const response = await apiGet("http://localhost:8085/api/transactions/1");
-   const response = await apiGet('http://localhost:8085/transactions/2');
+   const response = await apiGet('http://localhost:8085/api/transactions/2');
     console.log("API response for transactions:", response.data);
     return Array.isArray(response.data) ? response.data : [response.data];
   }
