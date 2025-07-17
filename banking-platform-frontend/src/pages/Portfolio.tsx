@@ -100,7 +100,7 @@ const TransactionPage: React.FC = () => {
                   filteredTransactions.map((row, index) => (
                     <TableRow key={index}>
                       <TableCell>{row.fundsId}</TableCell>
-                      <TableCell>{row.date}</TableCell>
+                      <TableCell>{row.transactionDate}</TableCell>
                       <TableCell>{row.status}</TableCell>
                       <TableCell>{row.amount}</TableCell>
                     </TableRow>
