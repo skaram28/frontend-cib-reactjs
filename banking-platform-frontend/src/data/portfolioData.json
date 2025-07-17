@@ -25,7 +25,7 @@
       "portfolioNumber": "PORT1009",
       "portfolioType": "SAVINGS",
       "status": "INACTIVE",
-      "startDate": "2025-06-09",
+      "startdate": "2025-06-09",
       "updateddate": null,
       "enddate": null
     }
