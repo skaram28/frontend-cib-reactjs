@@ -11,9 +11,17 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Numbers } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { AppDispatch } from "../redux/store"; // ✅ Adjust path to your store file
+import { submitKyc, getKycLoading, getKycError } from "../slices/kycSlice" // ✅ Adjust path to your slice
 
 const KYCSubmission = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>(); // ✅ Proper typed dispatch for async thunk
+
+  const loading = useSelector(getKycLoading);
+  const error = useSelector(getKycError);
 
   const initialValues = {
     aadhaarNumber: "",
@@ -29,9 +37,37 @@ const KYCSubmission = () => {
     panFile: Yup.mixed().required("PAN File is required"),
   });
 
-  const handleSubmit = (values: typeof initialValues) => {
-    navigate("/kyc-confirmation", { state: values });
+const handleSubmit = (values: typeof initialValues) => {
+  console.log("Form values:", values);
+
+  const currentDate = new Date().toISOString().split("T")[0]; // e.g. "2025-07-17"
+
+  const kycPayload = {
+    user: { id: 1 }, // Replace with actual user ID if available from auth
+
+    // Dynamically binding values from Formik
+    identityType: "Aadhaar + PAN",
+    identityNumber: `${values.aadhaarNumber} | ${values.panNumber}`,
+    documentUrl: "", // You can upload the file and get a URL here
+    documentType: values.aadhaarFile?.type || "PDF",
+
+    // Static or system-generated metadata
+    status: "PENDING",
+    submissionDate: currentDate,
+    verifiedDate: "", // empty until verification
+    verifiedBy: "",   // empty until verification
+    remarks: "KYC documents submitted by user.",
+    startDate: currentDate,
+    endDate: "2026-07-17",
+    updatedDate: new Date().toISOString(),
   };
+
+  dispatch(submitKyc(kycPayload)).then((res) => {
+    if (submitKyc.fulfilled.match(res)) {
+      navigate("/kyc-confirmation", { state: values });
+    }
+  });
+};
 
   return (
     <Container
