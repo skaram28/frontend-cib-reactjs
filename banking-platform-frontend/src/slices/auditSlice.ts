@@ -36,9 +36,9 @@ const initialState: AuditState = {
 // --- Fetch Audit by ID Thunk ---
 export const fetchAuditById = createAsyncThunk<Audit[], number>(
   'audit/fetchAuditById',
-  async (id, { rejectWithValue }) => {
+  async (_id, { rejectWithValue }) => {
     try {
-        const response = await apiGet(`http://localhost:8082/api/compliance/audit/id/${id}`);
+      const response = await apiGet(`http://localhost:8082/api/compliance/audit/id/1`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || 'Failed to fetch audit data');
