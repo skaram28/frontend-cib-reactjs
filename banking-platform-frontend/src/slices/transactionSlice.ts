@@ -9,10 +9,28 @@ import type { RootState } from "../redux/rootReducer";
 
 // Transaction Type
 export interface Transaction {
-  fundsId: string;
-  transactionDate: string;
-  status: string;
-  amount: string; // e.g. "$2.09"
+  // fundsId: string;
+  // transactionDate: string;
+  // status: string;
+  // amount: string; // e.g. "$2.09"
+id: number|null,
+    referenceId: string,
+    portfolio: {
+      id: number|null,
+      portfolioNumber: string,
+      portfolioType: string,
+      status: string,
+      startdate: string,
+      updateddate: string,
+      enddate: string
+    },
+    transactionType: string,
+    transactionDate: string|null,
+    status: string|null,
+    comments: string,
+    startDate: string|null,
+    updateDate: string,
+    endDate: string|null
 }
 
 // State Shape
@@ -34,7 +52,7 @@ export const fetchTransactions = createAsyncThunk<Transaction[]>(
   "transaction/fetchTransactions",
   async () => {
    // const response = await apiGet("http://localhost:8085/api/transactions/1");
-   const response = await apiGet('http://localhost:8085/api/transactions/2');
+   const response = await apiGet('http://localhost:8083/api/transactions/1');
     console.log("API response for transactions:", response.data);
     return Array.isArray(response.data) ? response.data : [response.data];
   }
