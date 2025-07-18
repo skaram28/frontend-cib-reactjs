@@ -5,6 +5,7 @@ import loginSlice from '../slices/loginSlice';
 import fundSlice from '../slices/fundSlice';
 import fetchFundByIdSlice from '../slices/fetchFundByIdSlice';
 import kycSlice from '../slices/kycSlice';
+import auditSlice from '../slices/auditSlice';
 // import registerReducer from '../redux/registerSlice';
 
 const rootReducer = combineReducers({
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     login:loginSlice,
     fund:fundSlice,
     fetchFundById:fetchFundByIdSlice,
-    kyc:kycSlice
+    kyc:kycSlice,
+    audit:auditSlice
 
 
   
