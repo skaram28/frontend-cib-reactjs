@@ -11,10 +11,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Numbers } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import type { AppDispatch } from "../redux/store"; // ✅ Adjust path to your store file
-import { submitKyc, getKycLoading, getKycError } from "../slices/kycSlice" // ✅ Adjust path to your slice
+import { submitKyc } from "../slices/kycSlice" // ✅ Adjust path to your slice
 
 const KYCSubmission = () => {
   const navigate = useNavigate();

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { apiGet, apiPost } from '../api/axiosInstance'; // ✅ You’ll need POST too
 import type { RootState } from '../redux/rootReducer';
+import { AxiosError } from 'axios';
+
 
 // --- Fund Interface ---
 export interface Fund {
@@ -61,9 +64,12 @@ export const investInFund = createAsyncThunk<
         userId,
       });
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || 'Investment failed');
-    }
+    } catch (error: unknown) {
+  const axiosError = error as AxiosError<{ message: string }>;
+  return rejectWithValue(
+    axiosError?.response?.data?.message || 'Investment failed'
+  );
+}
   }
 );
 
