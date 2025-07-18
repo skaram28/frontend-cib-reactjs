@@ -20,8 +20,8 @@ const KYCSubmission = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>(); // ✅ Proper typed dispatch for async thunk
 
-  const loading = useSelector(getKycLoading);
-  const error = useSelector(getKycError);
+  // const loading = useSelector(getKycLoading);
+  // const error = useSelector(getKycError);
 
   const initialValues = {
     aadhaarNumber: "",
