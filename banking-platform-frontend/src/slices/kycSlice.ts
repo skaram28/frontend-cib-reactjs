@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { apiPost } from '../api/axiosInstance';
 import type { RootState } from '../redux/rootReducer';
@@ -50,7 +51,7 @@ export const submitKyc = createAsyncThunk<
   async (kycPayload, { rejectWithValue }) => {
     console.log("kycPayload",kycPayload);
     try {
-      const response = await apiPost('http://localhost:8083/kycDetails', kycPayload);
+      const response = await apiPost('http://localhost:8082/api/compliance/kyc', kycPayload);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || 'KYC submission failed');

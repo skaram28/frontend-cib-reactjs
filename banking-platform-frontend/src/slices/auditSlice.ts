@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // features/audit/auditSlice.ts
 
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
@@ -37,7 +38,7 @@ export const fetchAuditById = createAsyncThunk<Audit[], number>(
   'audit/fetchAuditById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await apiGet(`http://localhost:8083/audit`);
+      const response = await apiGet(`http://localhost:8082/api/compliance/audit/1`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || 'Failed to fetch audit data');
