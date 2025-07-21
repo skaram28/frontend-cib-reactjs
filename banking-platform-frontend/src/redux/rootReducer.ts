@@ -6,20 +6,21 @@ import fundSlice from '../slices/fundSlice';
 import fetchFundByIdSlice from '../slices/fetchFundByIdSlice';
 import kycSlice from '../slices/kycSlice';
 import auditSlice from '../slices/auditSlice';
-// import registerReducer from '../redux/registerSlice';
+import userSlice from '../slices/userSlice';
+import registerSlice from '../slices/registerSlice';
 
 const rootReducer = combineReducers({
-//   register: registerReducer
     portfolio:portfolioSlice,
     transaction:transactionSlice,
     login:loginSlice,
     fund:fundSlice,
     fetchFundById:fetchFundByIdSlice,
     kyc:kycSlice,
-    audit:auditSlice
-
-
-  
+    audit:auditSlice,
+    userId:userSlice,
+    register:registerSlice,
+    //roleSlice: roleSlice,
+    
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

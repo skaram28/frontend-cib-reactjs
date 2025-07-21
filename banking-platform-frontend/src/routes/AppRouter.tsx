@@ -10,6 +10,7 @@ import KycSubmission from "../pages/KycSubmission"; // ✅ updated casing to mat
 import KycConfirmation from "../pages/KycConfirmation";
 import KycStatus from "../pages/KycStatus";
 import AdminDashboard from "../pages/AdminDashboard";
+import Logout from "../auth/Logout";
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -28,6 +29,7 @@ const AppRouter = () => (
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="fund-selection" element={<FundSelection />} />
         <Route path="portfolio" element={<Portfolio />} />
+        <Route path="logout" element={<Home />} />
       </Route>
       {/* Admin dashboard route */}
       <Route path="/admin-dashboard" element={<AdminDashboard />} />

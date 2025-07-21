@@ -18,22 +18,29 @@ import {
   Phone,
   Business,
   Numbers,
+  Password,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../redux/store";
+import { loginUser } from "../slices/loginSlice";
+import { registerUser } from "../slices/registerSlice";
 
 interface RegisterValues {
   username: string;
   password: string;
-  email: string;
-  fullName: string;
-  phone: string;
+  emailId: string;
+  firstName: string;
+  lastName:string;
+  phoneNumber: string;
   address: string;
   companyName: string;
-  registrationNumber: string;
+  identityNumber:string;
+   registrationNumber: string;
   kycDocument: File | null;
 }
 
@@ -46,13 +53,15 @@ const Register = () => {
   const initialValues: RegisterValues = {
     username: "",
     password: "",
-    email: "",
-    fullName: "",
-    phone: "",
+    emailId: "",
+    firstName: "",
+    lastName:"",
+    phoneNumber: "",
     address: "",
     companyName: "",
-    registrationNumber: "",
-    kycDocument: null,
+    identityNumber:'',
+    registrationNumber:'',
+    kycDocument:null
   };
 
   const validationSchema = Yup.object().shape({
@@ -68,13 +77,48 @@ const Register = () => {
       kycDocument: Yup.mixed().required("KYC Document is required"),
     }),
   });
+ const dispatch = useDispatch<AppDispatch>();
+  const handleSubmit = async (values: RegisterValues) => {
+    
+    const register={
+ firstName: values.firstName,
+ lastName:values.lastName,
+ username:values.username,
+ emailId:values.emailId,
+address:values.address,
+phoneNumber:values.phoneNumber,
+password:values.password,
+identityNumber:values.identityNumber
+    }
+    
+console.log("started .....");
 
-  const handleSubmit = (values: RegisterValues) => {
-    const dataToSend = {
-      ...values,
-      userType,
-    };
-    console.log("Submitted:", dataToSend);
+dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) => {
+      if (loginUser.fulfilled.match(result)) {
+       const responseData = result.payload;
+        console.log("Login successful", responseData);
+        localStorage.setItem('token', responseData?.accessToken || '');
+        
+
+
+     dispatch(registerUser(register)) .then((result) => {
+          if (registerUser.fulfilled.match(result)) {
+           const responseData = result.payload;
+            console.log("Login successful", responseData);
+            localStorage.setItem('token', responseData?.userId || '');
+            // Fetch roles after successful login
+            return responseData;
+      };
+   }
+  );
+  }
+}
+);
+    // const dataToSend = {
+    //   ...values,
+    //   userType,
+    // };
+    // console.log("Submitted:", dataToSend);
 
     Swal.fire({
       icon: "success",
@@ -221,8 +265,8 @@ const Register = () => {
                   label="Email"
                   name="email"
                   onChange={handleChange}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
+                  error={touched.emailId && Boolean(errors.emailId)}
+                  helperText={touched.emailId && errors.emailId}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -238,8 +282,8 @@ const Register = () => {
                   label="Full Name"
                   name="fullName"
                   onChange={handleChange}
-                  error={touched.fullName && Boolean(errors.fullName)}
-                  helperText={touched.fullName && errors.fullName}
+                  error={touched.firstName && Boolean(errors.firstName)}
+                  helperText={touched.firstName && errors.firstName}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -255,8 +299,8 @@ const Register = () => {
                   label="Phone"
                   name="phone"
                   onChange={handleChange}
-                  error={touched.phone && Boolean(errors.phone)}
-                  helperText={touched.phone && errors.phone}
+                  error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+                  helperText={touched.phoneNumber && errors.phoneNumber}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">

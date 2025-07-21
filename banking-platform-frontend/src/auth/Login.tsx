@@ -12,14 +12,17 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import users from "../data/users.json";
+import { getCurrentToken, loginUser } from "../slices/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "../redux/store";
+import { fetchRoles } from "../slices/roleSlice";
 
 interface LoginValues {
   username: string;
   password: string;
 }
-
 const Login = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const initialValues: LoginValues = {
@@ -32,33 +35,45 @@ const Login = () => {
     password: Yup.string().required("Password is required"),
   });
 
-  const handleSubmit = (values: LoginValues) => {
-    const matchedUser = users.find(
-      (user) =>
-        user.username === values.username && user.password === values.password
-    );
-
-    if (matchedUser) {
-      Swal.fire({
+  const handleSubmit = async (values: LoginValues) => {
+   dispatch(loginUser(values)) .then((result) => {
+      if (loginUser.fulfilled.match(result)) {
+       const responseData = result.payload;
+        console.log("Login successful", responseData);
+        localStorage.setItem('token', responseData?.accessToken || '');
+        console.log("Token stored in localStorage", localStorage.getItem('token'));
+       const roles = responseData?.roles || [];
+        console.log("User roles:", roles);
+        // Fetch roles after successful login
+       dispatch(fetchRoles()).then((result) => {
+        if (fetchRoles.fulfilled.match(result)) {
+         console.log("Roles fetched successfully", result.payload);
+        // localStorage.setItem('userId', result.payload); // Replace with actual user ID from response
+         const payload = result.payload;
+          // Store token in local
+          Swal.fire({
         icon: "success",
         title: "Login Successful",
-        text: `Welcome ${matchedUser.username}!`,
+        text: `Welcome ${values.username}!`,
         confirmButtonColor: "#0c3c60",
-      }).then(() => {
-        if (matchedUser.role === "Admin") {
-          navigate("/admin-dashboard");
-        } else {
-          navigate("/dashboard");
-        }
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Credentials",
-        text: "Please check your username and password",
-        confirmButtonColor: "#d33",
-      });
-    }
+      })
+      // Redirect to dashboard or home page
+       if (roles.includes("ROLE_USER")) {
+           navigate("/dashboard");
+       } else if (roles.includes("ROLE_ADMIN")) {
+           navigate("/admin-dashboard");
+       }
+      }
+       });
+             }else {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: result.payload as string,
+          confirmButtonColor: "#0c3c60",
+        });
+      }
+    });
   };
 
   return (
