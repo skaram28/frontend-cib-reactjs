@@ -15,8 +15,39 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-// import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
+ import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
 import { fetchTransactions, getTransactionData } from "../slices/transactionSlice";
+// Transaction Type
+export interface Transaction {
+id: number|null,
+    referenceId: string,
+    portfolio: {
+      id: number|null,
+      portfolioNumber: string,
+      portfolioType: string,
+      status: string,
+      startdate: string,
+      updateddate: string,
+      enddate: string
+    },
+    transactionType: string,
+    transactionDate: string|null,
+    status: string|null,
+    comments: string,
+    startDate: string|null,
+    updateDate: string,
+    endDate: string|null
+}
+// Portfolio Type
+export interface Portfolio {
+  id: number | string;
+  portfolioNumber: string;
+  portfolioType: string;
+  status: string;
+  startDate: string;
+  updateddate: string | null;
+  enddate: string | null;
+}
 
 const TransactionPage: React.FC = () => {
   const [tab, setTab] = useState(0);
@@ -26,14 +57,14 @@ const TransactionPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // Redux state  portfolio selector
-  // const portfolio = useAppSelector(getPortfolioData);
+   const portfolio = useAppSelector(getPortfolioData);
 
   // Redux state  transactions selector
   const transactions = useAppSelector(getTransactionData);
 
   useEffect(() => {
     dispatch(fetchTransactions());
-    // dispatch(fetchPortfolios());
+     dispatch(fetchPortfolios());
 
   }, [dispatch]);
 
@@ -76,7 +107,7 @@ console.log(transactions,"Transaction");
               size="small"
               sx={{ border: "1px solid black" }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e:any) => setSearch(e.target.value)}
             />
           </Box>
 
@@ -152,7 +183,7 @@ console.log(transactions,"Transaction");
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {portfolio?.length > 0 && portfolio.map((item: any, index: number) => (
+              {portfolio?.length > 0 && portfolio.map((item: any, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.portfolioNumber}</TableCell>
@@ -162,7 +193,7 @@ console.log(transactions,"Transaction");
                   <TableCell>{item.updateddate ?? "—"}</TableCell>
                   <TableCell>{item.enddate ?? "—"}</TableCell>
                 </TableRow>
-              ))} */}
+              ))}
             </TableBody>
           </Table>
         </Paper>
