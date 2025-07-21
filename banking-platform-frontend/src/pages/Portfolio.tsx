@@ -15,28 +15,28 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
- import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
+import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
 import { fetchTransactions, getTransactionData } from "../slices/transactionSlice";
 // Transaction Type
 export interface Transaction {
-id: number|null,
-    referenceId: string,
-    portfolio: {
-      id: number|null,
-      portfolioNumber: string,
-      portfolioType: string,
-      status: string,
-      startdate: string,
-      updateddate: string,
-      enddate: string
-    },
-    transactionType: string,
-    transactionDate: string|null,
-    status: string|null,
-    comments: string,
-    startDate: string|null,
-    updateDate: string,
-    endDate: string|null
+  id: number | null,
+  referenceId: string,
+  portfolio: {
+    id: number | null,
+    portfolioNumber: string,
+    portfolioType: string,
+    status: string,
+    startdate: string,
+    updateddate: string,
+    enddate: string
+  },
+  transactionType: string,
+  transactionDate: string | null,
+  status: string | null,
+  comments: string,
+  startDate: string | null,
+  updateDate: string,
+  endDate: string | null
 }
 // Portfolio Type
 export interface Portfolio {
@@ -57,21 +57,21 @@ const TransactionPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // Redux state  portfolio selector
-   const portfolio = useAppSelector(getPortfolioData);
+  const portfolio = useAppSelector(getPortfolioData);
 
   // Redux state  transactions selector
   const transactions = useAppSelector(getTransactionData);
 
   useEffect(() => {
     dispatch(fetchTransactions());
-     dispatch(fetchPortfolios());
+    dispatch(fetchPortfolios());
 
   }, [dispatch]);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-console.log(transactions,"Transaction");
+  console.log(transactions, "Transaction");
   //  const filteredTransactions = transactions.filter((row) =>
   //   // Object.values(row).some((val) =>
   //     // val.toString().toLowerCase().includes(search.toLowerCase())
@@ -107,7 +107,7 @@ console.log(transactions,"Transaction");
               size="small"
               sx={{ border: "1px solid black" }}
               value={search}
-              onChange={(e:any) => setSearch(e.target.value)}
+              onChange={(e: any) => setSearch(e.target.value)}
             />
           </Box>
 
@@ -128,9 +128,9 @@ console.log(transactions,"Transaction");
                     <b>Comments</b>
                   </TableCell>
                 </TableRow>
-                
+
               </TableHead>
-              
+
               <TableBody>
                 {transactions.length > 0 ? (
                   transactions.map((row, index) => (
