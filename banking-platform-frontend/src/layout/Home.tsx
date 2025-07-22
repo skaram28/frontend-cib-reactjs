@@ -1,7 +1,7 @@
 import { Box, CssBaseline } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
-import { Logout } from "@mui/icons-material";
+//  import { Logout } from "@mui/icons-material";
 
 const Home = () => {
   return (

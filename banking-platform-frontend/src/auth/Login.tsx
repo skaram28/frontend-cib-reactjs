@@ -12,8 +12,8 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { getCurrentToken, loginUser } from "../slices/loginSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {  loginUser } from "../slices/loginSlice";
+import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../redux/store";
 
 interface LoginValues {

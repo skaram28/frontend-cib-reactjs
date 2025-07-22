@@ -10,7 +10,7 @@ import KycSubmission from "../pages/KycSubmission"; // ✅ updated casing to mat
 import KycConfirmation from "../pages/KycConfirmation";
 import KycStatus from "../pages/KycStatus";
 import AdminDashboard from "../pages/AdminDashboard";
-import Logout from "../auth/Logout";
+// import Logout from "../auth/Logout";
 
 const AppRouter = () => (
   <BrowserRouter>

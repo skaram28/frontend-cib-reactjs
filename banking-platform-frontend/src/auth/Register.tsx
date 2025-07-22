@@ -17,9 +17,9 @@ import {
   Home,
   Phone,
   Business,
-  Numbers,
-  Password,
-} from "@mui/icons-material";
+  Numbers
+}
+   from "@mui/icons-material";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -27,7 +27,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../redux/store";
-import { loginUser } from "../slices/loginSlice";
+// import { loginUser } from "../slices/loginSlice";
 import { registerUser } from "../slices/registerSlice";
 
 interface RegisterValues {
