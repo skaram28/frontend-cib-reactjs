@@ -111,7 +111,6 @@ const FundSelection = () => {
     const payload = {
       fundId: selectedFund.id,
       amount: parseFloat(investmentAmount),
-      userId: 109, // Replace with actual user logic if needed
     };
   
     dispatch(investInFund(payload))

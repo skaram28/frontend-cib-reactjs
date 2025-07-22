@@ -47,7 +47,6 @@ export const fetchFunds = createAsyncThunk<Fund[]>(
 interface InvestPayload {
   fundId: number;
   amount: number;
-  userId: number;
 }
 
 export const investInFund = createAsyncThunk<
@@ -56,12 +55,12 @@ export const investInFund = createAsyncThunk<
   { rejectValue: string }
 >(
   'fund/investInFund',
-  async ({ fundId, amount, userId }, { rejectWithValue }) => {
+  async ({ fundId, amount }, { rejectWithValue }) => {
     try {
       // const response = await apiPost(`/invest`, {
         const response = await apiPost(`http://localhost:8084/api/funds/${fundId}/invest`, {
         "amount": amount,
-        "userId": userId,
+        "userId": fundId,
       });
       return response.data;
     } catch (error: unknown) {
