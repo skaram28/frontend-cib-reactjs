@@ -36,9 +36,9 @@ const initialState: PortfolioState = {
 export const fetchPortfolios = createAsyncThunk<Portfolio[]>(
   "portfolio/fetchPortfolios",
   async () => {
-    const response = await apiGet("http://localhost:8085/api/portfolio/1"); // 👈 Real API: http://localhost:8083/api/portfolio
-    const data = Array.isArray(response.data) ? response.data : [response.data];
-    return data;
+    const response = await apiGet("http://localhost:8083/api/portfolio/1"); // 👈 Real API: http://localhost:8083/api/portfolio
+   const data = Array.isArray(response.data) ? response.data : [response.data];
+   return data;
   }
 );
 
