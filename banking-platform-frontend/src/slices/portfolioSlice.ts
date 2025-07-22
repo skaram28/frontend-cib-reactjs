@@ -1,4 +1,3 @@
-// src/slices/portfolioSlice.ts
 import {
   createSlice,
   createAsyncThunk,
@@ -9,14 +8,15 @@ import { apiGet } from "../api/axiosInstance"; // ✅ Axios GET helper
 
 // Portfolio Type
 export interface Portfolio {
-  id: number | string;
-  portfolioNumber: string;
-  portfolioType: string;
-  status: string;
-  startDate: string;
-  updateddate: string | null;
-  enddate: string | null;
+  id: number | string,
+  portfolioNumber: string | null,
+  portfolioType: string,
+  status: string,
+  startDate: string,
+  updateddate: string | null,
+  enddate: string | null
 }
+
 
 // State Shape
 interface PortfolioState {
@@ -36,9 +36,9 @@ const initialState: PortfolioState = {
 export const fetchPortfolios = createAsyncThunk<Portfolio[]>(
   "portfolio/fetchPortfolios",
   async () => {
-    const response = await apiGet("http://localhost:8083/api/portfolio/1"); // 👈 Real API: http://localhost:8083/api/portfolio
-   const data = Array.isArray(response.data) ? response.data : [response.data];
-   return data;
+    const response = await apiGet("http://localhost:8085/api/portfolio/1"); // 👈 Real API: http://localhost:8083/api/portfolio
+    const data = Array.isArray(response.data) ? response.data : [response.data];
+    return data;
   }
 );
 
@@ -73,3 +73,4 @@ export const getPortfolioData = createSelector(
 
 // Export reducer
 export default portfolioSlice.reducer;
+

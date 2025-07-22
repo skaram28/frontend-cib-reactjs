@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import type { AppDispatch } from "../redux/store";
@@ -51,9 +51,14 @@ const KycConfirmation = () => {
     } else {
       alert("Failed to fetch audit data.");
     }
-  } catch (err) {
+  } catch (err: unknown) {
+  if (err instanceof Error) {
+    alert(`Error: ${err.message}`);
+  } else {
     alert("Something went wrong while fetching audit data.");
   }
+}
+
 };
 
 

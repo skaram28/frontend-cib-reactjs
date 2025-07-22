@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { apiGet } from '../api/axiosInstance';
 import type { RootState } from '../redux/rootReducer';
+import { AxiosError } from 'axios';
 
 // Fund interface (reuse your existing Fund interface)
 export interface Fund {
   id: number;
   name: string;
   sector: string;
-  risk: string;
-  return: string;
+  riskProfile: string;
+  returnRate: string;
   performance: string;
 }
 
@@ -32,9 +33,12 @@ export const fetchFundById = createAsyncThunk<Fund, number>(
       // const response = await apiGet(`/singlefunds/${fundId}`);
       const response = await apiGet(`http://localhost:8084/api/funds/${fundId}`);
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || 'Failed to fetch fund');
-    }
+    } catch (error: unknown) {
+     const axiosError = error as AxiosError<{ message: string }>;
+    return rejectWithValue(
+    axiosError?.response?.data?.message || 'Failed to fetch fund'
+  );
+}
   }
 );
 

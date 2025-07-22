@@ -49,7 +49,7 @@ export const submitKyc = createAsyncThunk<
 >(
   'kyc/submitKyc',
   async (kycPayload, { rejectWithValue }) => {
-    console.log("kycPayload",kycPayload);
+   // console.log("kycPayload",kycPayload);
     try {
       const response = await apiPost('http://localhost:8082/api/compliance/kyc', kycPayload);
       return response.data;

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
   InputAdornment,
@@ -18,6 +17,37 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchPortfolios, getPortfolioData } from "../slices/portfolioSlice";
 import { fetchTransactions, getTransactionData } from "../slices/transactionSlice";
+// Transaction Type
+export interface Transaction {
+  id: number | null,
+  referenceId: string,
+  portfolio: {
+    id: number | null,
+    portfolioNumber: string,
+    portfolioType: string,
+    status: string,
+    startdate: string,
+    updateddate: string,
+    enddate: string
+  },
+  transactionType: string,
+  transactionDate: string | null,
+  status: string | null,
+  comments: string,
+  startDate: string | null,
+  updateDate: string,
+  endDate: string | null
+}
+// Portfolio Type
+export interface Portfolio {
+  id: number | string;
+  portfolioNumber: string;
+  portfolioType: string;
+  status: string;
+  startDate: string;
+  updateddate: string | null;
+  enddate: string | null;
+}
 
 const TransactionPage: React.FC = () => {
   const [tab, setTab] = useState(0);
@@ -41,12 +71,16 @@ const TransactionPage: React.FC = () => {
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
+  console.log(transactions, "Transaction");
+  //  const filteredTransactions = transactions.filter((row) =>
+  //   // Object.values(row).some((val) =>
+  //     // val.toString().toLowerCase().includes(search.toLowerCase())
+  //   // )
+  //   return transactions;
+  //  );
 
-  const filteredTransactions = transactions.filter((row) =>
-    Object.values(row).some((val) =>
-      val.toString().toLowerCase().includes(search.toLowerCase())
-    )
-  );
+
+
 
   return (
     <Box p={2}>
@@ -73,7 +107,7 @@ const TransactionPage: React.FC = () => {
               size="small"
               sx={{ border: "1px solid black" }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e: any) => setSearch(e.target.value)}
             />
           </Box>
 
@@ -91,18 +125,20 @@ const TransactionPage: React.FC = () => {
                     <b>Status</b>
                   </TableCell>
                   <TableCell>
-                    <b>Amount</b>
+                    <b>Comments</b>
                   </TableCell>
                 </TableRow>
+
               </TableHead>
+
               <TableBody>
-                {filteredTransactions.length > 0 ? (
-                  filteredTransactions.map((row, index) => (
+                {transactions.length > 0 ? (
+                  transactions.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell>{row.fundsId}</TableCell>
-                      <TableCell>{row.transactionDate}</TableCell>
-                      <TableCell>{row.status}</TableCell>
-                      <TableCell>{row.amount}</TableCell>
+                      <TableCell>{row.referenceId}</TableCell>
+                      <TableCell>{row.updateDate}</TableCell>
+                      <TableCell>{row.transactionType}</TableCell>
+                      <TableCell>{row.comments}</TableCell>
                     </TableRow>
                   ))
                 ) : (

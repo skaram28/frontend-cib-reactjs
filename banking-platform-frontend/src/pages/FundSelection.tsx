@@ -73,7 +73,7 @@ const FundSelection = () => {
   }, [funds]);
   useEffect(() => {
     if (singleFundData) {
-      console.log("Fetched single fund data:", singleFundData);
+      // console.log("Fetched single fund data:", singleFundData);
       // You can do more here if needed
     }
   }, [singleFundData]);
@@ -81,7 +81,7 @@ const FundSelection = () => {
   const handleSearch = () => {
     const results = funds.filter((fund) => {
       const sectorMatch = sector ? fund.sector === sector : true;
-      const riskMatch = risk ? fund.risk === risk : true;
+      const riskMatch = risk ? fund.riskProfile === risk : true;
       const performanceMatch = performance ? fund.performance === performance : true;
       const searchMatch = searchQuery
         ? fund.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,7 +111,7 @@ const FundSelection = () => {
     const payload = {
       fundId: selectedFund.id,
       amount: parseFloat(investmentAmount),
-      userId: 501, // Replace with actual user logic if needed
+      userId: 109, // Replace with actual user logic if needed
     };
   
     dispatch(investInFund(payload))
@@ -331,7 +331,7 @@ sx={{ mb: 2 }}
                 >
                   {filteredFunds.map((fund) => {
                     const isSelected = selectedFund?.id === fund.id;
-                    const isPositive = fund.return.startsWith("+");
+                    const isPositive = fund.returnRate.startsWith("+");
 
                     return (
                       <Card
@@ -393,9 +393,9 @@ transition: "all 0.2s",
                           variant="outlined"
                         />
                             <Chip
-                          label={fund.risk}
+                          label={fund.riskProfile}
                           size="small"
-                          color={getRiskColor(fund.risk)}
+                          color={getRiskColor(fund.riskProfile)}
                           variant="outlined"
                         />
                           </Box>
@@ -415,7 +415,7 @@ transition: "all 0.2s",
                             Risk Level:
                           </Typography>
                             <Typography variant="body2" fontWeight="medium">
-                              {fund.risk}
+                              {fund.riskProfile}
                             </Typography>
                           </Box>
                           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -444,7 +444,7 @@ transition: "all 0.2s",
                                 fontWeight="bold"
                                 sx={{ color: isPositive ? "#4caf50" : "#f44336" }}
                               >
-                                {fund.return}
+                                {fund.returnRate}
                               </Typography>
                             </Box>
                           </Box>
@@ -491,7 +491,7 @@ transition: "all 0.2s",
                       Risk:
                     </Typography>
                         <Typography variant="body2" fontWeight="medium">
-                      {selectedFund.risk}
+                      {selectedFund.riskProfile}
                     </Typography>
                       </Box>
                       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -509,17 +509,17 @@ transition: "all 0.2s",
                         p: 2,
                         textAlign: "center",
 mb: 3,
-                        bgcolor: selectedFund.return.startsWith("+") ? "#e8f5e8" : "#ffeaea",
+                        bgcolor: selectedFund.returnRate.startsWith("+") ? "#e8f5e8" : "#ffeaea",
                       }}
                     >
                       <Typography
                         variant="h4"
                         fontWeight="bold"
                         sx={{
-                          color: selectedFund.return.startsWith("+") ? "#4caf50" : "#f44336",
+                          color: selectedFund.returnRate.startsWith("+") ? "#4caf50" : "#f44336",
                         }}
                       >
-                        {selectedFund.return}
+                        {selectedFund.returnRate}
                       </Typography>
                     </Paper>
 
