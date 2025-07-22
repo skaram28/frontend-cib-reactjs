@@ -3,29 +3,30 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../redux/rootReducer";
 import { apiPost } from "../api/axiosInstance";
 
-interface User {
-  username: string;
-  role: string;
-  token?: string;
+interface Token {
+  accessToken?: string;
+  expiresIn?: number;
+  roles?: string[];
+  userId?: string;
 }
 
 interface LoginState {
-  user: User | null;
+  accessToken: Token | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: LoginState = {
-  user: null,
+  accessToken: null,
   loading: false,
   error: null,
 };
 
-export const loginUser = createAsyncThunk<User, { username: string; password: string }>(
+export const loginUser = createAsyncThunk<Token, { username: string; password: string }>(
   "login/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await apiPost("/login", credentials);
+      const response = await apiPost("http://localhost:8082/api/auth/login", credentials);
       // assuming response.data = { username, role, token }
       return response.data;
     } catch (err: any) {
@@ -39,7 +40,7 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.user = null;
+      state.accessToken = null;
       state.loading = false;
       state.error = null;
     },
@@ -52,7 +53,7 @@ const loginSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.accessToken = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -63,7 +64,7 @@ const loginSlice = createSlice({
 
 export const getLoginLoading = (state: RootState) => state.login.loading;
 export const getLoginError = (state: RootState) => state.login.error;
-export const getCurrentUser = (state: RootState) => state.login.user;
+export const getCurrentToken = (state: RootState) => state.login.accessToken;
 
 export const { logout } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -6,6 +6,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Logout } from "../auth/Logout";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -28,6 +29,9 @@ const Sidebar = () => {
             <ListItemText primary={item.label} />
           </ListItemButton>
         ))}
+        <ListItemButton key={"logout"} onClick={() => { Logout(); navigate("/"); }}>
+          <ListItemText primary={"Logout"} />
+        </ListItemButton>
       </List>
     </Drawer>
   );
