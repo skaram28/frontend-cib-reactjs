@@ -26,7 +26,7 @@ export const loginUser = createAsyncThunk<Token, { username: string; password: s
   "login/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await apiPost("http://localhost:8082/api/auth/login", credentials);
+      const response = await apiPost("http://localhost:8081/api/auth/login", credentials);
       // assuming response.data = { username, role, token }
       return response.data;
     } catch (err: any) {
