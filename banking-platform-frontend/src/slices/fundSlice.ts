@@ -10,8 +10,8 @@ export interface Fund {
   id: number;
   name: string;
   sector: string;
-  risk: string;
-  return: string;
+  riskProfile: string;
+  returnRate: string;
   performance: string;
 }
 
@@ -60,8 +60,8 @@ export const investInFund = createAsyncThunk<
     try {
       // const response = await apiPost(`/invest`, {
         const response = await apiPost(`http://localhost:8084/api/funds/${fundId}/invest`, {
-        amount,
-        userId,
+        "amount": amount,
+        "userId": userId,
       });
       return response.data;
     } catch (error: unknown) {

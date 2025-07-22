@@ -38,7 +38,7 @@ const KYCSubmission = () => {
   });
 
 const handleSubmit = (values: typeof initialValues) => {
-  console.log("Form values:", values);
+//  console.log("Form values:", values);
 
   const currentDate = new Date().toISOString().split("T")[0]; // e.g. "2025-07-17"
 

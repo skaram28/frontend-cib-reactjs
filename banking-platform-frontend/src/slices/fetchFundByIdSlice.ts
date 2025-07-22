@@ -8,8 +8,8 @@ export interface Fund {
   id: number;
   name: string;
   sector: string;
-  risk: string;
-  return: string;
+  riskProfile: string;
+  returnRate: string;
   performance: string;
 }
 
