@@ -2,13 +2,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../redux/rootReducer";
 import { apiPost } from "../api/axiosInstance";
-import type { AppDispatch } from "../redux/store";
-import { useDispatch } from "react-redux";
 
 interface Token {
   accessToken?: string;
   expiresIn?: number;
   roles?: string[];
+  userId?: string;
 }
 
 interface LoginState {

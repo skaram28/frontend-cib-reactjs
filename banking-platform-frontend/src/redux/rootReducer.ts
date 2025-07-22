@@ -19,8 +19,6 @@ const rootReducer = combineReducers({
     audit:auditSlice,
     userId:userSlice,
     register:registerSlice,
-    //roleSlice: roleSlice,
-    
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

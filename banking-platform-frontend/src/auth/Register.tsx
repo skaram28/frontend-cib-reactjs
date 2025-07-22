@@ -67,9 +67,9 @@ const Register = () => {
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Required"),
     password: Yup.string().min(6, "Minimum 6 characters").required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
-    fullName: Yup.string().required("Required"),
-    phone: Yup.string().required("Required"),
+    emailId: Yup.string().email("Invalid email").required("Required"),
+    firstName: Yup.string().required("Required"),
+    phoneNumber: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
     ...(userType === "Company" && {
       companyName: Yup.string().required("Required"),
@@ -88,19 +88,12 @@ const Register = () => {
 address:values.address,
 phoneNumber:values.phoneNumber,
 password:values.password,
-identityNumber:values.identityNumber
+identityNumber:values.identityNumber,
+userType:userType,
+
     }
     
 console.log("started .....");
-
-dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) => {
-      if (loginUser.fulfilled.match(result)) {
-       const responseData = result.payload;
-        console.log("Login successful", responseData);
-        localStorage.setItem('token', responseData?.accessToken || '');
-        
-
-
      dispatch(registerUser(register)) .then((result) => {
           if (registerUser.fulfilled.match(result)) {
            const responseData = result.payload;
@@ -111,9 +104,9 @@ dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) =>
       };
    }
   );
-  }
-}
-);
+//   }
+// }
+// );
     // const dataToSend = {
     //   ...values,
     //   userType,
@@ -263,7 +256,7 @@ dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) =>
                   fullWidth
                   margin="normal"
                   label="Email"
-                  name="email"
+                  name="emailId"
                   onChange={handleChange}
                   error={touched.emailId && Boolean(errors.emailId)}
                   helperText={touched.emailId && errors.emailId}
@@ -280,7 +273,7 @@ dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) =>
                   fullWidth
                   margin="normal"
                   label="Full Name"
-                  name="fullName"
+                  name="firstName"
                   onChange={handleChange}
                   error={touched.firstName && Boolean(errors.firstName)}
                   helperText={touched.firstName && errors.firstName}
@@ -297,7 +290,7 @@ dispatch(loginUser({"username":"raamu","password":"raam123"})) .then((result) =>
                   fullWidth
                   margin="normal"
                   label="Phone"
-                  name="phone"
+                  name="phoneNumber"
                   onChange={handleChange}
                   error={touched.phoneNumber && Boolean(errors.phoneNumber)}
                   helperText={touched.phoneNumber && errors.phoneNumber}

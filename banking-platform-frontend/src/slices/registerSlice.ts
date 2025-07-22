@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '../redux/store';
-import { loginUser } from './loginSlice';
 
 export interface register{
 firstName: string;    
@@ -13,6 +10,7 @@ firstName: string;
     phoneNumber: string;
     password: string;
     identityNumber: string;
+    userType: string;
 }
 
 interface RegisterState {

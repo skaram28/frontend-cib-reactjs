@@ -15,7 +15,6 @@ import Swal from "sweetalert2";
 import { getCurrentToken, loginUser } from "../slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../redux/store";
-import { fetchRoles } from "../slices/roleSlice";
 
 interface LoginValues {
   username: string;
@@ -41,16 +40,9 @@ const Login = () => {
        const responseData = result.payload;
         console.log("Login successful", responseData);
         localStorage.setItem('token', responseData?.accessToken || '');
-        console.log("Token stored in localStorage", localStorage.getItem('token'));
+        localStorage.setItem('userId', responseData?.userId || '');
        const roles = responseData?.roles || [];
         console.log("User roles:", roles);
-        // Fetch roles after successful login
-       dispatch(fetchRoles()).then((result) => {
-        if (fetchRoles.fulfilled.match(result)) {
-         console.log("Roles fetched successfully", result.payload);
-        // localStorage.setItem('userId', result.payload); // Replace with actual user ID from response
-         const payload = result.payload;
-          // Store token in local
           Swal.fire({
         icon: "success",
         title: "Login Successful",
@@ -63,8 +55,8 @@ const Login = () => {
        } else if (roles.includes("ROLE_ADMIN")) {
            navigate("/admin-dashboard");
        }
-      }
-       });
+      //}
+       //});
              }else {
         Swal.fire({
           icon: "error",
