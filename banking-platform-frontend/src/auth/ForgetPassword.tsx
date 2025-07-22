@@ -24,7 +24,7 @@ const ForgotPassword = () => {
   });
 
   const handleSubmit = (values: ForgotPasswordValues) => {
-    console.log("Forgot Password Request:", values);
+   // console.log("Forgot Password Request:", values);
     // API call here
   };
 

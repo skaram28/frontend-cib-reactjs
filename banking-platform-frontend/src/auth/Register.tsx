@@ -74,7 +74,7 @@ const Register = () => {
       ...values,
       userType,
     };
-    console.log("Submitted:", dataToSend);
+    //console.log("Submitted:", dataToSend);
 
     Swal.fire({
       icon: "success",
